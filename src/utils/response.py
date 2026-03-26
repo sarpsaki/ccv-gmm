@@ -1,15 +1,27 @@
-
 from sdks.novavision.src.helper.package import PackageHelper
-from components.Package.src.models.PackageModel import PackageModel, PackageConfigs, ConfigExecutor, PackageOutputs, PackageResponse, PackageExecutor, OutputImage
+from capsules.CcvGmm.src.models.PackageModel import (
+    PackageModel,
+    OutputData,
+    ConfigExecutor,
+    PackageConfigs,
+    GmmExecutor,
+    GmmOutputs,
+    GmmResponse,
+)
 
 
-def build_response(context):
-    outputImage = OutputImage(value=context.image)
-    Outputs = PackageOutputs(outputImage=outputImage)
-    packageResponse = PackageResponse(outputs=Outputs)
-    packageExecutor = PackageExecutor(value=packageResponse)
+def build_response_gmm(context):
+
+    outputData = OutputData(value=context.outputData)
+
+    Outputs = GmmOutputs(outputData=outputData)
+
+    packageResponse = GmmResponse(outputs=Outputs)
+    packageExecutor = GmmExecutor(value=packageResponse)
     executor = ConfigExecutor(value=packageExecutor)
     packageConfigs = PackageConfigs(executor=executor)
+
     package = PackageHelper(packageModel=PackageModel, packageConfigs=packageConfigs)
     packageModel = package.build_model(context)
+
     return packageModel
