@@ -56,13 +56,15 @@ def run_gmm(image_bgr: np.ndarray, n_components: int = 2) -> np.ndarray:
 
     h, w = image_bgr.shape[:2]
 
+    blurred = cv2.GaussianBlur(image_bgr, (5, 5), 0)
+
     scale = min(1.0, _GMM_MAX_SIDE / max(h, w))
     if scale < 1.0:
         small_h = max(1, int(h * scale))
         small_w = max(1, int(w * scale))
-        small = cv2.resize(image_bgr, (small_w, small_h), interpolation=cv2.INTER_AREA)
+        small = cv2.resize(blurred, (small_w, small_h), interpolation=cv2.INTER_AREA)
     else:
-        small = image_bgr
+        small = blurred
         small_h, small_w = h, w
 
     hsv = cv2.cvtColor(small, cv2.COLOR_BGR2HSV)
