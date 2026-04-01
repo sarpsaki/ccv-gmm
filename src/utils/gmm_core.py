@@ -66,7 +66,7 @@ def run_gmm(image_bgr: np.ndarray, n_components: int = 2) -> np.ndarray:
         small_h, small_w = h, w
 
     hsv = cv2.cvtColor(small, cv2.COLOR_BGR2HSV)
-    pixels = hsv.reshape(-1, 3).astype(np.float32)
+    pixels = hsv.reshape(-1, 3).astype(np.float64)
 
     gmm = GaussianMixture(
         n_components=n_components,
@@ -74,6 +74,7 @@ def run_gmm(image_bgr: np.ndarray, n_components: int = 2) -> np.ndarray:
         max_iter=100,
         random_state=42,
         n_init=3,
+        reg_covar=1e-3,
     )
     labels_small = gmm.fit_predict(pixels).reshape(small_h, small_w)
 
